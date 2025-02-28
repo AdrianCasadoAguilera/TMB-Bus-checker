@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import StopCard from "./stop-card";
 import { getStaticStops } from "@/lib/utils";
 import { TStaticStop } from "@/lib/types";
-import Select from "react-select/base";
+import Select from "react-select";
 
 export default function StopsViewer() {
   const [stop, setStop] = useState(0);
   const [stopsList, setStopsList] = useState<TStaticStop[]>([]);
-  const [selectedStop, setSelectedStop] = useState(null);
+  const [selectedStop, setSelectedStop] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -43,16 +43,18 @@ export default function StopsViewer() {
         />
         <Select
           className="w-full"
-          options={stopsList}
+          options={stopsList.map((stop) => {
+            return { value: stop.id, label: stop.name };
+          })}
           value={selectedStop}
           inputValue=""
-          onInputChange={(newValue) => {}}
+          onInputChange={(newValue) => {
+            setSelectedStop(newValue);
+          }}
           onChange={(newValue) => {
-            setStop(newValue!.id);
+            setStop(newValue!.value);
           }}
           placeholder=""
-          onMenuOpen={function (): void {}}
-          onMenuClose={function (): void {}}
         />
         <button
           onClick={() => {
