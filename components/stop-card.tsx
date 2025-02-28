@@ -3,7 +3,7 @@
 import { getStopInfo } from "@/lib/actions";
 import { TBusInfo, TStop } from "@/lib/types";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
+import { faRotateRight, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type StopCardProps = {
@@ -51,18 +51,23 @@ export default function StopCard({ stop }: StopCardProps) {
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <p className=" w-fit p-2 text-white rounded-full bg-red-500">
+              <p className=" w-10 h-10 flex items-center justify-center text-white rounded-full bg-red-500">
                 {stop}
               </p>
               <p className="font-semibold">
                 {isPending ? "Loading..." : stopName}
               </p>
             </div>
-            <div className="mr-2">
+            <div className="mr-2 flex gap-2 items-center">
               <button onClick={fetchBuses} className="cursor-pointer">
                 <FontAwesomeIcon
                   icon={faRotateRight}
                   className={`${isPending && " animate-spin"}`}
+                />
+              </button>
+              <button className="cursor-pointer">
+                <FontAwesomeIcon
+                  icon={faStar}
                 />
               </button>
             </div>
@@ -82,7 +87,9 @@ export default function StopCard({ stop }: StopCardProps) {
                         ? "bg-green-500"
                         : bus.line[0] == "X"
                         ? "bg-black"
-                        : "bg-red-500"
+                        : 
+                        bus.line[0] == "D"
+                        ? "bg-purple-700" : "bg-red-500"
                     } text-white flex items-center justify-center w-10 rounded-lg`}
                   >
                     {bus.line}

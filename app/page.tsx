@@ -1,4 +1,4 @@
-import StopsViewer from "./components/stops-viewer";
+import StopsViewer from "../components/stops-viewer";
 
 export default function Home() {
   return (
