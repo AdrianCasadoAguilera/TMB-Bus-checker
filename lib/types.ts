@@ -8,6 +8,7 @@ export type TStop = {
 export type TStaticStop = {
   id: number;
   name: string;
+  position: string;
 };
 
 export type TBusInfo = {
@@ -16,3 +17,10 @@ export type TBusInfo = {
   timeInSec: number;
   timeInMin: number;
 };
+
+export interface IBus {
+  line: string;
+  destination: string;
+  "t-in-s": number;
+  "t-in-min": number;
+}

@@ -7,7 +7,7 @@ export const getStaticStops = async (): Promise<TStaticStop[] | null> => {
     .filter((line, index) => index > 0 && index < lines.length - 1)
     .map((line) => line.split(","));
   const filteredStops = stops.map((stop) => {
-    return { id: +stop[2], name: stop[3] };
+    return { id: +stop[2], name: stop[3], position: stop[20] };
   });
   return filteredStops;
 };

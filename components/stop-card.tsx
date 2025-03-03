@@ -8,9 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type StopCardProps = {
   stop: number;
+  setPosition: (value: { x: number; y: number }) => void;
 };
 
-export default function StopCard({ stop }: StopCardProps) {
+export default function StopCard({ stop, setPosition }: StopCardProps) {
   const [exists, setExists] = useState(true);
   const [buses, setBuses] = useState<TBusInfo[]>([]);
   const [stopName, setStopName] = useState<string>("");
@@ -26,12 +27,12 @@ export default function StopCard({ stop }: StopCardProps) {
     startTransition(async () => {
       const response = await getStopInfo(stop);
       if (response != null) {
-        console.log("Entra");
         setExists(true);
         const stopInfo: TStop = response;
         setLastUpdate(0);
         setBuses(stopInfo.buses);
         setStopName(stopInfo.name);
+        setPosition({ x: stopInfo.coords[1], y: stopInfo.coords[0] });
       } else {
         setExists(false);
       }
@@ -46,7 +47,7 @@ export default function StopCard({ stop }: StopCardProps) {
   };
 
   return (
-    <section className="w-80 min-h-80 h-fit p-4 rounded-xl border bg-white border-gray-300 shadow select-none">
+    <section className="z-10 w-80 sm:min-h-80 h-fit p-4 rounded-xl border bg-white border-gray-300 shadow select-none">
       {exists ? (
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center">
@@ -66,9 +67,7 @@ export default function StopCard({ stop }: StopCardProps) {
                 />
               </button>
               <button className="cursor-pointer">
-                <FontAwesomeIcon
-                  icon={faStar}
-                />
+                <FontAwesomeIcon icon={faStar} />
               </button>
             </div>
           </div>
@@ -87,9 +86,9 @@ export default function StopCard({ stop }: StopCardProps) {
                         ? "bg-green-500"
                         : bus.line[0] == "X"
                         ? "bg-black"
-                        : 
-                        bus.line[0] == "D"
-                        ? "bg-purple-700" : "bg-red-500"
+                        : bus.line[0] == "D"
+                        ? "bg-purple-700"
+                        : "bg-red-500"
                     } text-white flex items-center justify-center w-10 rounded-lg`}
                   >
                     {bus.line}
