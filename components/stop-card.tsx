@@ -3,8 +3,7 @@
 import { getStopInfo } from "@/lib/actions";
 import { TBusInfo, TStop } from "@/lib/types";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { faRotateRight, faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
 type StopCardProps = {
   stop: number;
@@ -61,13 +60,9 @@ export default function StopCard({ stop, setPosition }: StopCardProps) {
             </div>
             <div className="mr-2 flex gap-2 items-center">
               <button onClick={fetchBuses} className="cursor-pointer">
-                <FontAwesomeIcon
-                  icon={faRotateRight}
-                  className={`${isPending && " animate-spin"}`}
+                <ArrowPathIcon
+                  className={`${isPending && " animate-spin"} h-5`}
                 />
-              </button>
-              <button className="cursor-pointer">
-                <FontAwesomeIcon icon={faStar} />
               </button>
             </div>
           </div>
