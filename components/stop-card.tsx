@@ -52,7 +52,7 @@ export default function StopCard({ stop, setPosition }: StopCardProps) {
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <p className=" w-10 h-10 flex items-center justify-center text-white rounded-full bg-red-500">
+              <p className="w-10 h-10 flex items-center justify-center text-white rounded-full bg-red-500">
                 {stop}
               </p>
               <p className="font-semibold">
