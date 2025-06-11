@@ -36,10 +36,10 @@ export default function RootLayout({
       </head>
 
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden flex flex-col h-screen`}
       >
         <Header />
-        <div className="p-4">{children}</div>
+        <main className="flex-1">{children}</main>
       </body>
     </html>
   );

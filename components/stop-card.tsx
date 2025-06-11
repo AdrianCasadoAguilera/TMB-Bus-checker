@@ -20,6 +20,7 @@ export default function StopCard({ stop, setPosition }: StopCardProps) {
 
   useEffect(() => {
     fetchBuses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [, stop]);
 
   const fetchBuses = async () => {
@@ -46,7 +47,7 @@ export default function StopCard({ stop, setPosition }: StopCardProps) {
   };
 
   return (
-    <section className="z-10 w-80 sm:min-h-80 h-fit p-4 rounded-xl border bg-white border-gray-300 shadow select-none">
+    <section className="z-10 w-80 sm:min-h-80 h-fit p-4 rounded-xl border bg-white border-gray-300 shadow m-4 absolute top-28">
       {exists ? (
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center">

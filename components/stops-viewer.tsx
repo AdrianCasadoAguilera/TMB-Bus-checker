@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import StopCard from "./stop-card";
 import { getStaticStops } from "@/lib/utils";
 import { TStaticStop } from "@/lib/types";
 import dynamic from "next/dynamic";
+import { getStopInfo } from "@/lib/actions";
 
 export default function StopsViewer() {
   const [stop, setStop] = useState(0);
@@ -44,21 +45,25 @@ export default function StopsViewer() {
     }
   };
 
-  const Map = dynamic(() => import("./test-map"), {
-    ssr: false,
-  });
+  const Map = useMemo(
+    () =>
+      dynamic(() => import("./map"), {
+        ssr: false,
+      }),
+    []
+  );
 
   return (
-    <section className="flex flex-col gap-5">
+    <section className="flex flex-col gap-5 h-full">
       <Map stopName={selectedStop} position={postion} />
       <form
         onSubmit={(e) => {
           e.preventDefault();
           if (inputRef.current) setStop(+inputRef.current?.value);
         }}
-        className="flex gap-2"
+        className="flex gap-2 m-4 absolute w-[calc(100vw-2rem)] top-14"
       >
-        <div className="relative w-full">
+        <div className="flex-1">
           <input
             value={selectedStop}
             placeholder="Stop ID or name..."
@@ -88,6 +93,13 @@ export default function StopsViewer() {
                   setSelectedStop(stop.name);
                   setStop(stop.id);
                   setShowDropdown(false);
+                  getStopInfo(stop.id).then((data) => {
+                    console.log(data);
+                    if (data) {
+                      console.log("Position; ", data.coords);
+                      setPosition({ x: data.coords[0], y: data.coords[1] });
+                    }
+                  });
                 }}
               >
                 <div>{stop.id}</div>
@@ -106,9 +118,7 @@ export default function StopsViewer() {
           Consultar
         </button>
       </form>
-      <div className="w-full flex sm:justify-between justify-center">
-        {stop > 0 && <StopCard setPosition={setPosition} stop={stop} />}
-      </div>
+      {stop > 0 && <StopCard setPosition={setPosition} stop={stop} />}
     </section>
   );
 }
