@@ -26,6 +26,7 @@ export default function Map({ position, stopName }: MapProps) {
         key={position ? `${position.x}-${position.y}` : "default"}
         center={[position ? position.x : 41.387, position ? position.y : 2.17]}
         zoom={17}
+        zoomControl={false}
         style={{ width: "100%", height: "100%" }}
         scrollWheelZoom={true}
       >

@@ -108,15 +108,6 @@ export default function StopsViewer() {
             ))}
           </ul>
         </div>
-
-        <button
-          onClick={() => {
-            if (inputRef.current) setStop(+inputRef.current?.value);
-          }}
-          className="z-10 bg-red-500 text-white py-2 px-4 border-2 border-red-500 hover:bg-white transition-all hover:text-red-500 rounded-lg cursor-pointer"
-        >
-          Consultar
-        </button>
       </form>
       {stop > 0 && <StopCard setPosition={setPosition} stop={stop} />}
     </section>
