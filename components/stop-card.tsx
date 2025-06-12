@@ -1,6 +1,6 @@
 "use client";
 
-import { getStopInfo } from "@/lib/actions";
+import { getTmbStopInfo } from "@/app/actions/data-fetchers/tmb";
 import { TBusInfo, TStop } from "@/lib/types";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
@@ -25,7 +25,7 @@ export default function StopCard({ stop, setPosition }: StopCardProps) {
 
   const fetchBuses = async () => {
     startTransition(async () => {
-      const response = await getStopInfo(stop);
+      const response = await getTmbStopInfo(stop);
       if (response != null) {
         setExists(true);
         const stopInfo: TStop = response;
@@ -52,7 +52,7 @@ export default function StopCard({ stop, setPosition }: StopCardProps) {
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <p className="w-10 h-10 flex items-center justify-center text-white rounded-full bg-red-500">
+              <p className="min-w-10 h-10 flex items-center justify-center text-white rounded-full bg-red-500">
                 {stop}
               </p>
               <p className="font-semibold">

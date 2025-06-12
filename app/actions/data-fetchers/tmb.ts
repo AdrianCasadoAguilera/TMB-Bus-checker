@@ -1,8 +1,8 @@
 "use server";
 
-import { IBus, TBusInfo, TStop } from "./types";
+import { IBus, TBusInfo, TStop } from "@/lib/types";
 
-export const getStopInfo = async (stop: number): Promise<TStop | null> => {
+export const getTmbStopInfo = async (stop: number): Promise<TStop | null> => {
   const stopInfo = await fetch(
     `https://api.tmb.cat/v1/transit/parades/${stop}/?app_id=${process.env.API_ID}&app_key=${process.env.API_KEY}`
   );

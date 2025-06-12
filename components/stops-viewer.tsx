@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import StopCard from "./stop-card";
-import { getStaticStops } from "@/lib/utils";
+import { getTmbStops } from "@/lib/utils";
 import { TStaticStop } from "@/lib/types";
 import dynamic from "next/dynamic";
-import { getStopInfo } from "@/lib/actions";
+import { getTmbStopInfo } from "@/app/actions/data-fetchers/tmb";
 
 export default function StopsViewer() {
   const [stop, setStop] = useState(0);
@@ -21,6 +21,7 @@ export default function StopsViewer() {
 
   useEffect(() => {
     loadStaticStops();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -38,10 +39,10 @@ export default function StopsViewer() {
   }, [filter, stopsList]);
 
   const loadStaticStops = async () => {
-    const staticStops = await getStaticStops();
+    const staticStops = await getTmbStops();
     if (staticStops) {
       setStopsList(staticStops);
-      setFilteredStops(staticStops);
+      setFilteredStops([...filteredStops, ...staticStops]);
     }
   };
 
@@ -72,8 +73,16 @@ export default function StopsViewer() {
               if (inputRef.current) setFilter(inputRef.current.value);
             }}
             ref={inputRef}
-            onFocus={() => setShowDropdown(true)}
-            onBlur={() => setTimeout(() => setShowDropdown(false), 100)}
+            onFocus={() => {
+              setShowDropdown(true);
+            }}
+            onBlur={(e) => {
+              setTimeout(() => {
+                if (!e.target.contains(document.activeElement)) {
+                  setShowDropdown(false);
+                }
+              }, 200);
+            }}
             className="w-full bg-white p-2 rounded-lg shadow border border-gray-300"
             type="text"
           />
@@ -93,10 +102,9 @@ export default function StopsViewer() {
                   setSelectedStop(stop.name);
                   setStop(stop.id);
                   setShowDropdown(false);
-                  getStopInfo(stop.id).then((data) => {
+                  getTmbStopInfo(stop.id).then((data) => {
                     console.log(data);
                     if (data) {
-                      console.log("Position; ", data.coords);
                       setPosition({ x: data.coords[0], y: data.coords[1] });
                     }
                   });
