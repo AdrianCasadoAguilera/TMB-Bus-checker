@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import StopCard from "./stop-card";
-import { getStaticStops } from "@/lib/utils";
+import { getTmbStops } from "@/lib/utils";
 import { TStaticStop } from "@/lib/types";
 import dynamic from "next/dynamic";
+import { getTmbStopInfo } from "@/app/actions/data-fetchers/tmb";
 
 export default function StopsViewer() {
   const [stop, setStop] = useState(0);
@@ -20,6 +21,7 @@ export default function StopsViewer() {
 
   useEffect(() => {
     loadStaticStops();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -37,28 +39,32 @@ export default function StopsViewer() {
   }, [filter, stopsList]);
 
   const loadStaticStops = async () => {
-    const staticStops = await getStaticStops();
+    const staticStops = await getTmbStops();
     if (staticStops) {
       setStopsList(staticStops);
-      setFilteredStops(staticStops);
+      setFilteredStops([...filteredStops, ...staticStops]);
     }
   };
 
-  const Map = dynamic(() => import("./test-map"), {
-    ssr: false,
-  });
+  const Map = useMemo(
+    () =>
+      dynamic(() => import("./map"), {
+        ssr: false,
+      }),
+    []
+  );
 
   return (
-    <section className="flex flex-col gap-5">
+    <section className="flex flex-col gap-5 h-full">
       <Map stopName={selectedStop} position={postion} />
       <form
         onSubmit={(e) => {
           e.preventDefault();
           if (inputRef.current) setStop(+inputRef.current?.value);
         }}
-        className="flex gap-2"
+        className="flex gap-2 m-4 absolute w-[calc(100vw-2rem)] top-14"
       >
-        <div className="relative w-full">
+        <div className="flex-1">
           <input
             value={selectedStop}
             placeholder="Stop ID or name..."
@@ -67,8 +73,16 @@ export default function StopsViewer() {
               if (inputRef.current) setFilter(inputRef.current.value);
             }}
             ref={inputRef}
-            onFocus={() => setShowDropdown(true)}
-            onBlur={() => setTimeout(() => setShowDropdown(false), 100)}
+            onFocus={() => {
+              setShowDropdown(true);
+            }}
+            onBlur={(e) => {
+              setTimeout(() => {
+                if (!e.target.contains(document.activeElement)) {
+                  setShowDropdown(false);
+                }
+              }, 200);
+            }}
             className="w-full bg-white p-2 rounded-lg shadow border border-gray-300"
             type="text"
           />
@@ -88,6 +102,12 @@ export default function StopsViewer() {
                   setSelectedStop(stop.name);
                   setStop(stop.id);
                   setShowDropdown(false);
+                  getTmbStopInfo(stop.id).then((data) => {
+                    console.log(data);
+                    if (data) {
+                      setPosition({ x: data.coords[0], y: data.coords[1] });
+                    }
+                  });
                 }}
               >
                 <div>{stop.id}</div>
@@ -96,19 +116,8 @@ export default function StopsViewer() {
             ))}
           </ul>
         </div>
-
-        <button
-          onClick={() => {
-            if (inputRef.current) setStop(+inputRef.current?.value);
-          }}
-          className="z-10 bg-red-500 text-white py-2 px-4 border-2 border-red-500 hover:bg-white transition-all hover:text-red-500 rounded-lg cursor-pointer"
-        >
-          Consultar
-        </button>
       </form>
-      <div className="w-full flex sm:justify-between justify-center">
-        {stop > 0 && <StopCard setPosition={setPosition} stop={stop} />}
-      </div>
+      {stop > 0 && <StopCard setPosition={setPosition} stop={stop} />}
     </section>
   );
 }

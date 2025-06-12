@@ -18,9 +18,9 @@ export type TBusInfo = {
   timeInMin: number;
 };
 
-export interface IBus {
+export type IBus = {
   line: string;
   destination: string;
   "t-in-s": number;
   "t-in-min": number;
-}
+};

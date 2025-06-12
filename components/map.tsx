@@ -21,10 +21,12 @@ export default function Map({ position, stopName }: MapProps) {
   }
 
   return (
-    <div id="map" className="absolute top-16 left-0 z-0 h-screen w-screen">
+    <div id="map" className="left-0 z-0 h-full w-full">
       <MapContainer
+        key={position ? `${position.x}-${position.y}` : "default"}
         center={[position ? position.x : 41.387, position ? position.y : 2.17]}
         zoom={17}
+        zoomControl={false}
         style={{ width: "100%", height: "100%" }}
         scrollWheelZoom={true}
       >
