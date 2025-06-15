@@ -2,15 +2,16 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import StopCard from "./stop-card";
-import { getTmbStops } from "@/lib/utils";
-import { TStaticStop } from "@/lib/types";
+import { getStaticStops } from "@/lib/utils";
+import { StaticStop } from "@/lib/types";
 import dynamic from "next/dynamic";
 import { getTmbStopInfo } from "@/app/actions/data-fetchers/tmb";
+import { getGtfsData } from "@/app/actions/data-fetchers/gtfs";
 
 export default function StopsViewer() {
-  const [stop, setStop] = useState(0);
-  const [stopsList, setStopsList] = useState<TStaticStop[]>([]);
-  const [filteredStops, setFilteredStops] = useState<TStaticStop[]>([]);
+  const [stop, setStop] = useState("");
+  const [stopsList, setStopsList] = useState<StaticStop[]>([]);
+  const [filteredStops, setFilteredStops] = useState<StaticStop[]>([]);
   const [selectedStop, setSelectedStop] = useState("");
   const [filter, setFilter] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
@@ -21,6 +22,7 @@ export default function StopsViewer() {
 
   useEffect(() => {
     loadStaticStops();
+    getGtfsData("https://www.ambmobilitat.cat/transit/trips-updates/trips.bin");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -39,7 +41,7 @@ export default function StopsViewer() {
   }, [filter, stopsList]);
 
   const loadStaticStops = async () => {
-    const staticStops = await getTmbStops();
+    const staticStops = await getStaticStops();
     if (staticStops) {
       setStopsList(staticStops);
       setFilteredStops([...filteredStops, ...staticStops]);
@@ -60,7 +62,7 @@ export default function StopsViewer() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (inputRef.current) setStop(+inputRef.current?.value);
+          if (inputRef.current) setStop(inputRef.current?.value);
         }}
         className="flex gap-2 m-4 absolute w-[calc(100vw-2rem)] top-14"
       >
@@ -117,7 +119,7 @@ export default function StopsViewer() {
           </ul>
         </div>
       </form>
-      {stop > 0 && <StopCard setPosition={setPosition} stop={stop} />}
+      {stop != "" && <StopCard setPosition={setPosition} stop={stop} />}
     </section>
   );
 }

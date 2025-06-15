@@ -1,26 +1,27 @@
-export type TStop = {
-  id: number;
+export type Stop = {
+  id: string;
   name: string;
   coords: number[];
-  buses: TBusInfo[];
+  buses: BusInfo[];
 };
 
-export type TStaticStop = {
-  id: number;
+export type StaticStop = {
+  id: string;
   name: string;
   position: string;
 };
 
-export type TBusInfo = {
+export type StaticTrip = {
+  id: string;
+};
+
+export type BusInfo = {
   line: string;
   destination: string;
   timeInSec: number;
   timeInMin: number;
 };
 
-export type IBus = {
-  line: string;
-  destination: string;
-  "t-in-s": number;
-  "t-in-min": number;
+export type Bus = {
+  temps_arribada: number;
 };

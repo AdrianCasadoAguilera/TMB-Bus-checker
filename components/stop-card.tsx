@@ -1,19 +1,19 @@
 "use client";
 
 import { getTmbStopInfo } from "@/app/actions/data-fetchers/tmb";
-import { TBusInfo, TStop } from "@/lib/types";
+import { BusInfo, Stop } from "@/lib/types";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
 type StopCardProps = {
-  stop: number;
+  stop: string;
   setPosition: (value: { x: number; y: number }) => void;
 };
 
 export default function StopCard({ stop, setPosition }: StopCardProps) {
   const [exists, setExists] = useState(true);
-  const [buses, setBuses] = useState<TBusInfo[]>([]);
-  const [stopName, setStopName] = useState<string>("");
+  const [buses, setBuses] = useState<BusInfo[]>([]);
+  const [stopName, seStopName] = useState<string>("");
   const [lastUpdate, setLastUpdate] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -28,12 +28,13 @@ export default function StopCard({ stop, setPosition }: StopCardProps) {
       const response = await getTmbStopInfo(stop);
       if (response != null) {
         setExists(true);
-        const stopInfo: TStop = response;
+        const stopInfo: Stop = response;
         setLastUpdate(0);
         setBuses(stopInfo.buses);
-        setStopName(stopInfo.name);
+        seStopName(stopInfo.name);
         setPosition({ x: stopInfo.coords[1], y: stopInfo.coords[0] });
       } else {
+        console.log("Error en la respuesta: ", response);
         setExists(false);
       }
       if (intervalRef.current) {
@@ -84,6 +85,8 @@ export default function StopCard({ stop, setPosition }: StopCardProps) {
                         ? "bg-black"
                         : bus.line[0] == "D"
                         ? "bg-purple-700"
+                        : bus.line[0] === "N"
+                        ? "bg-blue-500"
                         : "bg-red-500"
                     } text-white flex items-center justify-center w-10 rounded-lg`}
                   >
