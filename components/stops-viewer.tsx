@@ -2,11 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import StopCard from "./stop-card";
-import { getStaticStops } from "@/lib/utils";
+import { getStaticStops } from "@/app/actions/actions";
 import { StaticStop } from "@/lib/types";
 import dynamic from "next/dynamic";
 import { getTmbStopInfo } from "@/app/actions/data-fetchers/tmb";
-import { getGtfsData } from "@/app/actions/data-fetchers/gtfs";
 
 export default function StopsViewer() {
   const [stop, setStop] = useState("");
@@ -22,9 +21,10 @@ export default function StopsViewer() {
 
   useEffect(() => {
     loadStaticStops();
-    getGtfsData("https://www.ambmobilitat.cat/transit/trips-updates/trips.bin");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const selectedStaticStop = stopsList.find((i) => i.id === stop);
 
   useEffect(() => {
     if (filter === "") {
@@ -119,7 +119,9 @@ export default function StopsViewer() {
           </ul>
         </div>
       </form>
-      {stop != "" && <StopCard setPosition={setPosition} stop={stop} />}
+      {selectedStaticStop && (
+        <StopCard setPosition={setPosition} stop={selectedStaticStop} />
+      )}
     </section>
   );
 }

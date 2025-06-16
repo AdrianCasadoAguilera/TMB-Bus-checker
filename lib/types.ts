@@ -9,6 +9,7 @@ export type StaticStop = {
   id: string;
   name: string;
   position: string;
+  operators: string[];
 };
 
 export type StaticTrip = {
@@ -18,8 +19,7 @@ export type StaticTrip = {
 export type BusInfo = {
   line: string;
   destination: string;
-  timeInSec: number;
-  timeInMin: number;
+  timesInSec: number[];
 };
 
 export type Bus = {

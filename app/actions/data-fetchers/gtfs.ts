@@ -1,6 +1,6 @@
 "use server";
 
-import { Temporal } from "@js-temporal/polyfill";
+// import { Temporal } from "@js-temporal/polyfill";
 import protobuf from "protobufjs";
 
 const protoPath = "protos/gtfs-realtime.proto";
@@ -22,12 +22,12 @@ export const getGtfsData = async (url: string) => {
   });
 
   // Get the actual and +24h timestamp in Barcelona
-  const timeZone = "Europe/Madrid";
-  const now = Temporal.Now.zonedDateTimeISO(timeZone);
-  const nowTimestamp = Math.floor(now.epochMilliseconds / 1000);
-  const in24hTimestamp = Math.floor(
-    now.add(Temporal.Duration.from({ days: 1 })).epochMilliseconds / 1000
-  );
+  // const timeZone = "Europe/Madrid";
+  // const now = Temporal.Now.zonedDateTimeISO(timeZone);
+  // const nowTimestamp = Math.floor(now.epochMilliseconds / 1000);
+  // const in24hTimestamp = Math.floor(
+  //   now.add(Temporal.Duration.from({ days: 1 })).epochMilliseconds / 1000
+  // );
 
   return object.entity;
 };

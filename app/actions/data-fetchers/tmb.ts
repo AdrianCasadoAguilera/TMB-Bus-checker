@@ -25,25 +25,21 @@ export const getTmbStopInfo = async (stop: string): Promise<Stop | null> => {
     const nowTimestamp = Math.floor(now.epochMilliseconds); // Milliseconds
     const transformedData: BusInfo[] = busesData.parades
       .find((parada: { codi_parada: string }) => parada.codi_parada === stop)
-      .linies_trajectes.flatMap(
-        (trip: {
+      .linies_trajectes.map(
+        (line: {
           propers_busos: Bus[];
           nom_linia: string;
           desti_trajecte: string;
-        }) => {
-          return trip.propers_busos.map((bus: Bus) => {
-            const timeInSec = Math.trunc(
-              (bus.temps_arribada - nowTimestamp) / 1000
-            );
-            return {
-              line: trip.nom_linia,
-              destination: trip.desti_trajecte,
-              timeInSec,
-              timeInMin: Math.trunc(timeInSec / 60),
-            };
-          });
-        }
+        }) => ({
+          line: line.nom_linia,
+          destination: line.desti_trajecte,
+          timesInSec: line.propers_busos.map(
+            (bus: { temps_arribada: number }) =>
+              Math.trunc((bus.temps_arribada - nowTimestamp) / 1000)
+          ),
+        })
       );
+    console.log(transformedData);
 
     const stopProperties = jsonStopInfo.features[0].properties;
     return {
