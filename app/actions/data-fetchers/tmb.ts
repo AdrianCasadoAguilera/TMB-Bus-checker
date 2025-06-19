@@ -1,6 +1,6 @@
 "use server";
 
-import { Bus, BusInfo, Stop } from "@/lib/types";
+import { Bus, BusInfo, Stop } from "@/lib/types/types";
 import { Temporal } from "@js-temporal/polyfill";
 
 export const getTmbStopInfo = async (stop: string): Promise<Stop | null> => {
@@ -13,6 +13,7 @@ export const getTmbStopInfo = async (stop: string): Promise<Stop | null> => {
   if (jsonStopInfo.totalFeatures == 0) {
     return null;
   }
+  console.log(stop);
 
   const buses = await fetch(
     `https://api.tmb.cat/v1/itransit/bus/parades/${stop}?app_id=${process.env.API_ID}&app_key=${process.env.API_KEY}`
@@ -23,23 +24,24 @@ export const getTmbStopInfo = async (stop: string): Promise<Stop | null> => {
     const timeZone = "Europe/Madrid";
     const now = Temporal.Now.zonedDateTimeISO(timeZone);
     const nowTimestamp = Math.floor(now.epochMilliseconds); // Milliseconds
-    const transformedData: BusInfo[] = busesData.parades
-      .find((parada: { codi_parada: string }) => parada.codi_parada === stop)
-      .linies_trajectes.map(
-        (line: {
-          propers_busos: Bus[];
-          nom_linia: string;
-          desti_trajecte: string;
-        }) => ({
-          line: line.nom_linia,
-          destination: line.desti_trajecte,
-          timesInSec: line.propers_busos.map(
-            (bus: { temps_arribada: number }) =>
-              Math.trunc((bus.temps_arribada - nowTimestamp) / 1000)
-          ),
-        })
-      );
-    console.log(transformedData);
+    console.log(busesData);
+    const parada = busesData.parades.find(
+      (parada: { codi_parada: string }) => +parada.codi_parada === +stop
+    );
+    if (!parada) return null;
+    const transformedData: BusInfo[] = parada.linies_trajectes.map(
+      (line: {
+        propers_busos: Bus[];
+        nom_linia: string;
+        desti_trajecte: string;
+      }) => ({
+        line: line.nom_linia,
+        destination: line.desti_trajecte,
+        timesInSec: line.propers_busos.map((bus: { temps_arribada: number }) =>
+          Math.trunc((bus.temps_arribada - nowTimestamp) / 1000)
+        ),
+      })
+    );
 
     const stopProperties = jsonStopInfo.features[0].properties;
     return {

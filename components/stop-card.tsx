@@ -1,9 +1,10 @@
 "use client";
 
 import { getTmbStopInfo } from "@/app/actions/data-fetchers/tmb";
-import { BusInfo, StaticStop, Stop } from "@/lib/types";
+import { BusInfo, StaticStop, Stop } from "@/lib/types/types";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
+// import { getGtfsStopInfo } from "@/app/actions/data-fetchers/gtfs";
 
 type StopCardProps = {
   stop: StaticStop;
@@ -24,38 +25,20 @@ export default function StopCard({ stop, setPosition }: StopCardProps) {
   }, [, stop]);
 
   const fetchBuses = async () => {
+    setExists(true);
     startTransition(async () => {
-      const allStops: Stop = {
-        id: "",
-        name: "",
-        coords: [],
-        buses: [],
-      };
+      const tmbStop = await getTmbStopInfo(stop.id);
 
-      if (stop.operators.includes("TMB")) {
-        const tmbStop = await getTmbStopInfo(stop.id);
-        if (tmbStop === null) {
-          console.log("Error getting TMB buses");
-          return;
-        }
-        allStops.id = tmbStop.id;
-        allStops.name = tmbStop.name;
-        allStops.coords = tmbStop.coords;
-        allStops.buses = tmbStop.buses;
-      }
-      if (stop.operators.includes("AMB")) {
-        // const ambStop = await getGtfsData();
-      }
-
-      if (allStops !== null) {
+      if (tmbStop !== null) {
         setExists(true);
-        const stopInfo: Stop = allStops;
+        const stopInfo: Stop = tmbStop;
         setLastUpdate(0);
         setBuses(stopInfo.buses);
         seStopName(stopInfo.name);
+        console.log({ x: stopInfo.coords[1], y: stopInfo.coords[0] });
         setPosition({ x: stopInfo.coords[1], y: stopInfo.coords[0] });
       } else {
-        console.log("Error en la respuesta: ", allStops);
+        console.log("Error en la respuesta: ", tmbStop);
         setExists(false);
       }
       if (intervalRef.current) {
@@ -108,13 +91,15 @@ export default function StopCard({ stop, setPosition }: StopCardProps) {
                           ? "bg-blue-800"
                           : bus.line[0] == "V"
                           ? "bg-green-500"
-                          : ["X1", "X2"].includes(bus.line)
+                          : ["X1", "X2", "X3"].includes(bus.line)
                           ? "bg-black"
                           : bus.line[0] == "D"
                           ? "bg-purple-700"
                           : bus.line[0] === "N"
                           ? "bg-blue-500"
-                          : bus.line[0] === "L" || bus.line[0] === "X"
+                          : bus.line[0] === "L" ||
+                            bus.line[0] === "X" ||
+                            ["86"].includes(bus.line)
                           ? "bg-amber-400"
                           : "bg-red-500"
                       } text-white flex items-center justify-center w-10 rounded-lg`}

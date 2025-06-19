@@ -3,9 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import StopCard from "./stop-card";
 import { getStaticStops } from "@/app/actions/actions";
-import { StaticStop } from "@/lib/types";
+import { StaticStop } from "@/lib/types/types";
 import dynamic from "next/dynamic";
-import { getTmbStopInfo } from "@/app/actions/data-fetchers/tmb";
 
 export default function StopsViewer() {
   const [stop, setStop] = useState("");
@@ -104,12 +103,6 @@ export default function StopsViewer() {
                   setSelectedStop(stop.name);
                   setStop(stop.id);
                   setShowDropdown(false);
-                  getTmbStopInfo(stop.id).then((data) => {
-                    console.log(data);
-                    if (data) {
-                      setPosition({ x: data.coords[0], y: data.coords[1] });
-                    }
-                  });
                 }}
               >
                 <div>{stop.id}</div>
