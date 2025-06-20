@@ -1,15 +1,23 @@
 "use server";
 
-import fs from "fs/promises";
-import path from "path";
 import { StaticStop } from "@/lib/types/types";
 
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_BUCKET = "bcnbustime";
+const SUPABASE_FILE = "stops.csv";
+
 export const getStaticStops = async (): Promise<StaticStop[] | null> => {
-  const tmbPath = path.join(process.cwd(), "data/static-gtfs/tmb/stops.csv");
+  const tmbPath = await fetch(
+    SUPABASE_URL +
+      "/storage/v1/object/public/" +
+      SUPABASE_BUCKET +
+      "/" +
+      SUPABASE_FILE
+  );
   // const ambPath = path.join(process.cwd(), "data/static-gtfs/amb/stops.csv");
 
   try {
-    const tmbData = await fs.readFile(tmbPath, "utf-8");
+    const tmbData = await tmbPath.text();
     const tmbLines = tmbData.split("\n");
 
     const tmbStops = tmbLines
