@@ -1,15 +1,19 @@
-import { TStaticStop } from "./types";
+import { StaticStop } from "./types/types";
 
-export const getTmbStops = async (): Promise<TStaticStop[] | null> => {
-  const data = await fetch("/tmb-stops.csv").then((response) =>
-    response.text()
-  );
-  const lines = data.split("\n");
-  const stops = lines
-    .filter((line, index) => index > 0 && index < lines.length - 1)
-    .map((line) => line.split(","));
-  const filteredStops = stops.map((stop) => {
-    return { id: +stop[2], name: stop[3], position: stop[20] };
-  });
-  return filteredStops;
+export const getStaticStopByName = async (
+  stops: StaticStop[],
+  stopName: string
+) => {
+  stops.find((stop) => stop.name === stopName);
 };
+
+export function parsePoint(pointStr: string) {
+  const coords = pointStr
+    .replace("POINT (", "")
+    .replace(")", "")
+    .split(" ")
+    .map(Number)
+    .reverse();
+
+  return coords;
+}

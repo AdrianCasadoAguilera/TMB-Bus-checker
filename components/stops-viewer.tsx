@@ -2,15 +2,14 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import StopCard from "./stop-card";
-import { getTmbStops } from "@/lib/utils";
-import { TStaticStop } from "@/lib/types";
+import { getStaticStops } from "@/app/actions/actions";
+import { StaticStop } from "@/lib/types/types";
 import dynamic from "next/dynamic";
-import { getTmbStopInfo } from "@/app/actions/data-fetchers/tmb";
 
 export default function StopsViewer() {
-  const [stop, setStop] = useState(0);
-  const [stopsList, setStopsList] = useState<TStaticStop[]>([]);
-  const [filteredStops, setFilteredStops] = useState<TStaticStop[]>([]);
+  const [stop, setStop] = useState("");
+  const [stopsList, setStopsList] = useState<StaticStop[]>([]);
+  const [filteredStops, setFilteredStops] = useState<StaticStop[]>([]);
   const [selectedStop, setSelectedStop] = useState("");
   const [filter, setFilter] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
@@ -23,6 +22,8 @@ export default function StopsViewer() {
     loadStaticStops();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const selectedStaticStop = stopsList.find((i) => i.id === stop);
 
   useEffect(() => {
     if (filter === "") {
@@ -39,7 +40,7 @@ export default function StopsViewer() {
   }, [filter, stopsList]);
 
   const loadStaticStops = async () => {
-    const staticStops = await getTmbStops();
+    const staticStops = await getStaticStops();
     if (staticStops) {
       setStopsList(staticStops);
       setFilteredStops([...filteredStops, ...staticStops]);
@@ -60,7 +61,7 @@ export default function StopsViewer() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (inputRef.current) setStop(+inputRef.current?.value);
+          if (inputRef.current) setStop(inputRef.current?.value);
         }}
         className="flex gap-2 m-4 absolute w-[calc(100vw-2rem)] top-14"
       >
@@ -102,12 +103,6 @@ export default function StopsViewer() {
                   setSelectedStop(stop.name);
                   setStop(stop.id);
                   setShowDropdown(false);
-                  getTmbStopInfo(stop.id).then((data) => {
-                    console.log(data);
-                    if (data) {
-                      setPosition({ x: data.coords[0], y: data.coords[1] });
-                    }
-                  });
                 }}
               >
                 <div>{stop.id}</div>
@@ -117,7 +112,9 @@ export default function StopsViewer() {
           </ul>
         </div>
       </form>
-      {stop > 0 && <StopCard setPosition={setPosition} stop={stop} />}
+      {selectedStaticStop && (
+        <StopCard setPosition={setPosition} stop={selectedStaticStop} />
+      )}
     </section>
   );
 }
