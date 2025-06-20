@@ -13,7 +13,6 @@ export const getTmbStopInfo = async (stop: string): Promise<Stop | null> => {
   if (jsonStopInfo.totalFeatures == 0) {
     return null;
   }
-  console.log(stop);
 
   const buses = await fetch(
     `https://api.tmb.cat/v1/itransit/bus/parades/${stop}?app_id=${process.env.API_ID}&app_key=${process.env.API_KEY}`
@@ -24,7 +23,6 @@ export const getTmbStopInfo = async (stop: string): Promise<Stop | null> => {
     const timeZone = "Europe/Madrid";
     const now = Temporal.Now.zonedDateTimeISO(timeZone);
     const nowTimestamp = Math.floor(now.epochMilliseconds); // Milliseconds
-    console.log(busesData);
     const parada = busesData.parades.find(
       (parada: { codi_parada: string }) => +parada.codi_parada === +stop
     );

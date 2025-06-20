@@ -35,7 +35,6 @@ export default function StopCard({ stop, setPosition }: StopCardProps) {
         setLastUpdate(0);
         setBuses(stopInfo.buses);
         seStopName(stopInfo.name);
-        console.log({ x: stopInfo.coords[1], y: stopInfo.coords[0] });
         setPosition({ x: stopInfo.coords[1], y: stopInfo.coords[0] });
       } else {
         console.log("Error en la respuesta: ", tmbStop);
