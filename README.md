@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BCN Bus Checker – Realtime Barcelona Bus Schedule 🚌
 
-## Getting Started
+![CI](https://github.com/AdrianCasadoAguilera/TMB-Bus-checker/actions/workflows/ci.yml/badge.svg)
+![Node](https://img.shields.io/badge/node-%3E=20.0.0-green)
+![Status](https://img.shields.io/badge/status-in%20progress-yellow)
 
-First, run the development server:
+
+**BCN Bus Checker** is a real-time web app that lets users check when their bus will arrive at a specific stop.  
+Currently focused on TMB buses in Barcelona, the app is designed to expand to support more operators, including AMB, FGC, Rodalies and the metro network.
+
+![Made with React](https://img.shields.io/badge/-React-61DAFB?logo=react&logoColor=white)
+![Made with Next.js](https://img.shields.io/badge/-Next.js-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/-TypeScript-3178c6?logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/-TailwindCSS-38b2ac?logo=tailwind-css&logoColor=white)
+
+---
+
+## 💾 Installation
 
 ```bash
+git clone https://github.com/AdrianCasadoAguilera/TMB-Bus-checker.git
+cd TMB-Bus-checker
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 👨‍💻 Demo
+This project is deployed with Vercel
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+[▶️ See live demo](https://tmb-bus-checker.vercel.app)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ⚒️ How is it done?
+### 🧱 Tech Stack
+- **React + Next.js (App Router)** – frontend and routing
+- **TypeScript** – static typing
+- **Tailwind CSS** – utility-first styling
+- **Vitest** – unit and component testing
+- **Supabase** – authentication & file storage (future features)
+- **Vercel** – deployment platform
 
-## Learn More
+### 🔌 Data Sources
+**TMB Open Data API** – real-time and static data for Barcelona’s main bus operator
+**Planned GTFS / GTFS-RT integration** – to support multiple operators via the industry standard (FGC, AMB, Renfe...)
 
-To learn more about Next.js, take a look at the following resources:
+## 🧪 Testing
+```
+npm run test
+```
+(Uses Vitest to test components and logic)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
