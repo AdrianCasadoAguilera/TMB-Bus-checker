@@ -3,7 +3,7 @@
 ![CI](https://github.com/AdrianCasadoAguilera/TMB-Bus-checker/actions/workflows/ci.yml/badge.svg)
 ![Node](https://img.shields.io/badge/node-%3E=20.0.0-green)
 ![Status](https://img.shields.io/badge/status-in%20progress-yellow)
-
+[![Test coverage](https://codecov.io/gh/AdrianCasadoAguilera/TMB-Bus-checker/branch/main/graph/badge.svg)](https://codecov.io/gh/AdrianCasadoAguilera/TMB-Bus-checker)
 
 **BCN Bus Checker** is a real-time web app that lets users check when their bus will arrive at a specific stop.  
 Currently focused on TMB buses in Barcelona, the app is designed to expand to support more operators, including AMB, FGC, Rodalies and the metro network.
