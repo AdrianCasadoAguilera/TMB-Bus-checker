@@ -9,6 +9,8 @@ export default defineConfig({
     globals: true,
     setupFiles: "./setupTests.ts",
     coverage: {
+      reporter: ["text", "lcov"],
+      provider: "v8",
       exclude: [
         "node_modules/",
         ".next/",
