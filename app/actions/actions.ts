@@ -3,7 +3,7 @@
 import { StaticStop } from "@/lib/types/types";
 
 const STOPS_URL = process.env.STOPS_URL;
-const STOPS_FILE = "stops.csv";
+const STOPS_FILE = "parades.csv";
 
 export const getStaticStops = async (): Promise<StaticStop[] | null> => {
   // const ambPath = path.join(process.cwd(), "data/static-gtfs/amb/stops.csv");

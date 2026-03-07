@@ -18,10 +18,10 @@
     "dotenv": "^16.4.7",
     "jsdom": "^26.1.0",
     "leaflet": "^1.9.4",
-    "next": "15.3.8",
+    "next": "^16.1.6",
     "protobufjs": "^7.5.3",
-    "react": "^19.0.0-rc.1",
-    "react-dom": "^19.0.0-rc.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "react-leaflet": "^5.0.0-rc.2",
     "react-select": "^5.10.0",
     "tmb-bus-checker": "file:"
